@@ -1,5 +1,5 @@
 const { Plugin } = require('powercord/entities');
-const { getModule, React } = require('powercord/webpack');
+const { getModule, React, getAllModules } = require('powercord/webpack');
 const { inject, uninject } = require('powercord/injector');
 const ChannelUserCount = require('./ChannelUserCount.jsx');
 
@@ -24,8 +24,12 @@ class VoiceUserCount extends (
       if (!channel.isGuildVoice()) return res;
       if (channel.userLimit) return res;
 
+      const userCount = this.voiceStates.countVoiceStatesForChannel(channel.id);
+
+      if (!userCount) return res;
+
       const ChannelUserCountElement = React.createElement(ChannelUserCount, {
-        userCount: this.voiceStates.countVoiceStatesForChannel(channel.id),
+        userCount,
       });
 
       args[0].children.push(ChannelUserCountElement);

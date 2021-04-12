@@ -19,8 +19,8 @@ class ChannelUserCount extends React.PureComponent {
     return (
       <div className={classes.userLimit}>
         <div className={classes.wrapper}>
-          <span className={classes.users} style={{ width: 'auto' }}>
-            {('00' + this.props.userCount).substr(-2, 2)}
+          <span className={classes.users} style={{ width: 'auto', padding: '0 6px' }}>
+            {String(this.props.userCount).padStart(2, '0')}
           </span>
         </div>
       </div>
