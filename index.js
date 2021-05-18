@@ -7,7 +7,6 @@ class VoiceUserCount extends (
   Plugin
 ) {
   async startPlugin() {
-    this.voiceStates = await getModule(['getVoiceStates']);
     this.patchChannelItem();
   }
 
@@ -16,6 +15,7 @@ class VoiceUserCount extends (
   }
 
   async patchChannelItem() {
+    const { countVoiceStatesForChannel } = await getModule(['getVoiceStates']);
     const ConnectedVoiceChannel = await getModule(m => m.default && m.default.displayName === 'ChannelItem');
 
     const renderCount = (args, res) => {
@@ -23,8 +23,9 @@ class VoiceUserCount extends (
 
       if (!channel.isGuildVoice()) return res;
       if (channel.userLimit) return res;
+      if (args[0].children[0]?.props.video) return res;
 
-      const userCount = this.voiceStates.countVoiceStatesForChannel(channel.id);
+      const userCount = countVoiceStatesForChannel(channel.id);
 
       if (!userCount) return res;
 

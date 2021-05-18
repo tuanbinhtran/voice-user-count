@@ -1,6 +1,6 @@
 {
   "name": "Voice User Count",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Total user count next to the voice channel (like the user limit)",
   "author": "Pakuyasa (tuanbinhtran)",
   "license": "MIT"
