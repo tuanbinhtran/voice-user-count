@@ -1,5 +1,5 @@
 const { Plugin } = require('powercord/entities');
-const { getModule, React, getAllModules } = require('powercord/webpack');
+const { getModule, React } = require('powercord/webpack');
 const { inject, uninject } = require('powercord/injector');
 const ChannelUserCount = require('./ChannelUserCount.jsx');
 
@@ -15,7 +15,9 @@ class VoiceUserCount extends (
   }
 
   async patchChannelItem() {
-    const { countVoiceStatesForChannel } = await getModule(['getVoiceStates']);
+    const { countVoiceStatesForChannel } = await getModule([
+      'countVoiceStatesForChannel',
+    ]);
     const ConnectedVoiceChannel = await getModule(m => m.default && m.default.displayName === 'ChannelItem');
 
     const renderCount = (args, res) => {
