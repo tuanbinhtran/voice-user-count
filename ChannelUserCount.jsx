@@ -3,8 +3,8 @@ const { React, getModule } = require('powercord/webpack');
 let classes;
 setImmediate(async () => {
   classes = {
-    ...(await getModule(['wrapper', 'users'])),
-    ...(await getModule(['userLimit'])),
+    ...(await getModule(['wrapper', 'users'], false)),
+    ...(await getModule(['userLimit'], false)),
   };
 });
 
