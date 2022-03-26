@@ -8,24 +8,23 @@ setImmediate(async () => {
   };
 });
 
-class ChannelUserCount extends React.PureComponent {
-  constructor(props) {
-    super(props);
+const ChannelUserCount = ({ userCount }) => {
+  if (!userCount) {
+    return null;
   }
 
-  render() {
-    if (!this.props.userCount) return null;
-
-    return (
-      <div className={classes.userLimit}>
-        <div className={classes.wrapper}>
-          <span className={classes.users} style={{ width: 'auto', padding: '0 6px' }}>
-            {String(this.props.userCount).padStart(2, '0')}
-          </span>
-        </div>
+  return (
+    <div className={classes.userLimit}>
+      <div className={classes.wrapper}>
+        <span
+          className={classes.users}
+          style={{ width: 'auto', padding: '0 6px' }}
+        >
+          {String(userCount).padStart(2, '0')}
+        </span>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-module.exports = ChannelUserCount;
+module.exports = React.memo(ChannelUserCount);
