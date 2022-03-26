@@ -15,27 +15,20 @@ class VoiceUserCount extends (
   }
 
   async patchChannelItem() {
-    const { countVoiceStatesForChannel } = await getModule([
-      'countVoiceStatesForChannel',
-    ]);
     const ConnectedVoiceChannel = await getModule(m => m.default && m.default.displayName === 'ChannelItem');
 
     const renderCount = (args, res) => {
-      let channel = args[0].channel;
+      if(!this.shouldApply(args)) {
+        return res;
+      }
 
-      if (!channel.isGuildVoice()) return res;
-      if (channel.userLimit) return res;
-      if (args[0].children[0]?.props.video) return res;
-
-      const userCount = countVoiceStatesForChannel(channel.id);
-
-      if (!userCount) return res;
-
+      const originalChildren = args[0].children[3].props.children;
+      const userCount = originalChildren?.props?.voiceStates?.length;
       const ChannelUserCountElement = React.createElement(ChannelUserCount, {
         userCount,
       });
 
-      args[0].children.push(ChannelUserCountElement);
+      args[0].children[3].props.children = [originalChildren, ChannelUserCountElement];
 
       return res;
     };
@@ -43,6 +36,19 @@ class VoiceUserCount extends (
     inject('voice-user-count', ConnectedVoiceChannel, 'default', renderCount);
 
     ConnectedVoiceChannel.default.displayName = 'ChannelItem';
+  }
+
+  shouldApply(args) {
+    const channel = args[0].channel;
+    const isVideo = args[0].children[0]?.props.video;
+    const users = args[0].children[3].props.children?.props?.voiceStates?.length;
+
+    return (
+      channel.isGuildVoice() &&
+      !channel.userLimit &&
+      !isVideo &&
+      users
+    )
   }
 };
 
